@@ -1,28 +1,17 @@
 {
-  "name": "hackmorelos",
-  "version": "0.1.0",
-  "private": true,
+  "name": "untitled1",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
   "scripts": {
-    "dev": "next dev",
-    "build": "next build",
-    "start": "next start",
-    "lint": "next lint"
+    "test": "echo \"Error: no test specified\" && exit 1"
   },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
   "dependencies": {
-    "@emotion/react": "^11.11.4",
-    "@emotion/styled": "^11.11.5",
-    "@mui/icons-material": "^5.15.18",
-    "@mui/material": "^5.15.18",
-    "@mui/styles": "^5.15.18",
-    "appwrite": "^14.0.1",
-    "next": "14.2.3",
-    "react": "^18",
-    "react-dom": "^18"
-  },
-  "devDependencies": {
-    "@types/node": "^20",
-    "@types/react": "18.3.2",
-    "@types/react-dom": "^18",
-    "typescript": "5.4.5"
+    "axios": "^1.6.8",
+    "cheerio": "^1.0.0-rc.12",
+    "mongoose": "^8.4.0"
   }
 }
