@@ -1,28 +1,28 @@
 'use client'
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/material';
-import TextField from '@material-ui/core/TextField';
-import Button from '@material-ui/core/Button';
-import Paper from '@material-ui/core/Paper';
-import Typography from '@material-ui/core/Typography';
+import { makeStyles } from '@mui/styles';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
+import Paper from '@mui/material/Paper';
+import Typography from '@mui/material/Typography';
 
 const useStyles = makeStyles((theme) => ({
   root: {
     display: 'flex',
     flexDirection: 'column',
     height: '100%',
-    padding: theme.spacing(2),
+    padding: 16, // Aquí se utilizan valores numéricos en lugar de theme.spacing
   },
   messagesContainer: {
     flexGrow: 1,
     overflowY: 'auto',
-    marginBottom: theme.spacing(2),
+    marginBottom: 16, // También aquí
   },
   message: {
-    padding: theme.spacing(1),
-    margin: theme.spacing(1),
-    borderRadius: theme.shape.borderRadius,
-    backgroundColor: theme.palette.grey[200],
+    padding: 8, // Y aquí
+    margin: 8, // Y aquí
+    borderRadius: 4, // Y aquí
+    backgroundColor: '#F2F2F2',
   },
   inputContainer: {
     display: 'flex',
@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme) => ({
   },
   textField: {
     flexGrow: 1,
-    marginRight: theme.spacing(2),
+    marginRight: 16, // Y aquí
   },
 }));
 
