@@ -1,9 +1,16 @@
+"use client"
 import Image from "next/image";
 import styles from "./page.module.css";
 
 export default function Home() {
+  const handleenfermera = () =>{
+    window.location.href = '/signup/enfermera';
+  }
   return (
     <main className={styles.main}>
+      <button
+          onClick={handleenfermera}
+          >enfermera</button>
       <div className={styles.description}>
         <p>
           Get started by editing&nbsp;
@@ -88,6 +95,7 @@ export default function Home() {
           <p>
             Instantly deploy your Next.js site to a shareable URL with Vercel.
           </p>
+          
         </a>
       </div>
     </main>

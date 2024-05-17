@@ -31,6 +31,8 @@ const Page = () => {
         navigator.geolocation.getCurrentPosition(
             ({ coords: { latitude, longitude } }) => {
                 setCoords({ lat: latitude, lng: longitude });
+                console.log("Latitud:", latitude);
+                console.log("Longitud:", longitude);
             },
             () => {
                 setError("Tu navegador está bien, pero ocurrió un error.");
@@ -39,10 +41,6 @@ const Page = () => {
     } else {
         setError("Tu navegador no dispone de la geolocalización, actualízalo.");
     }
-    <>
-    <p>Latitud: <span id="latitude">{coords.lat !== null ? coords.lat : '-'}</span></p>
-    <p>Longitud: <span id="longitude">{coords.lng !== null ? coords.lng : '-'}</span></p>
-    </>
   }
 
   const handleSend = () => {
@@ -67,6 +65,7 @@ const Page = () => {
   };
 
   useEffect(() => {
+    handlegeo();
     const storedMarker = localStorage.getItem('selectedStore');
     if (storedMarker) {
       setSelectedMarker(JSON.parse(storedMarker));
@@ -88,7 +87,7 @@ const Page = () => {
             <p>Partner location: {selectedMarker && selectedMarker.direccion}</p>
             <p>Maximum allowable amount: {selectedMarker && selectedMarker.monto}</p>
           </div> */}
-          <GoogleMapComponent onSelectMarker={handleSelectMarker}/>
+          <GoogleMapComponent onSelectMarker={handleSelectMarker} coords={coords} />
         </div>
       </Grid>
       <Grid item xs={3} sm={5}>

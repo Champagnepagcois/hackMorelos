@@ -37,7 +37,7 @@ const center = {
 // wallet
 // "0x1234567890abcdef1234567890abcdef12345678"
 
-function MyComponent({onSelectMarker}) {
+function MyComponent({onSelectMarker, coords}) {
     
 
   const { isLoaded } = useJsApiLoader({
