@@ -15,6 +15,7 @@
     "@mui/material": "^5.15.18",
     "@mui/styles": "^5.15.18",
     "appwrite": "^14.0.1",
+    "firebase": "^10.12.0",
     "next": "14.2.3",
     "react": "^18",
     "react-dom": "^18"

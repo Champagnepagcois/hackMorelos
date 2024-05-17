@@ -19,11 +19,3 @@ export const auth = firebase.auth();
 export const db = fb.firestore();
 export default fb;
 
-/* if (!firebase.apps.length) {
-  // Initialize Firebase
-  firebase.initializeApp(firebaseConfig);  
-}else {
-  firebase.app(); // if already initialized, use that one 
-}  
-
-export default firebase */
