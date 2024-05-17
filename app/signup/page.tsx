@@ -24,28 +24,45 @@ export default function SignUp() {
     guardarDatosUsuario(username, email, password); // Llama a la función para guardar datos
   };
 
-  const guardarDatosUsuario = (username: string, email: string, password: string) => {
-    // Referencia a la colección "usuarios" y el documento con el ID del nombre de usuario
-    const usuarioRef = db.collection('usuarios').doc(username);
+  const contarCaracteresSinEspacios = (cadena: string) => {
+    // Eliminar los espacios de la cadena usando la función replace
+    const cadenaSinEspacios = cadena.replace(/\s/g, '');
+    // Contar el número de caracteres en la cadena sin espacios
+    const numeroCaracteres = cadenaSinEspacios.length;
+    return numeroCaracteres;
+  };
 
-    // Datos a guardar
-    const datosUsuario = {
-      email: email,
-      password: password
-    };
-    usuarioRef.set(datosUsuario)
-      .then(() => {
-        console.log('Datos del usuario guardados correctamente.');
-      })
-      .catch((error) => {
-        console.error('Error al guardar los datos del usuario:', error);
-      });
-      localStorage.setItem('username', username);
-      window.location.href = '/dashboard';
+  const guardarDatosUsuario = (username: string, email: string, password: string) => {
+    if (!username && contarCaracteresSinEspacios(username)>3 && !email && !password) {
+      // Referencia a la colección "usuarios" y el documento con el ID del nombre de usuario
+      const usuarioRef = db.collection('usuarios').doc(username);
+
+      // Datos a guardar
+      const datosUsuario = {
+        email: email,
+        password: password
+      };
+      usuarioRef.set(datosUsuario)
+        .then(() => {
+          console.log('Datos del usuario guardados correctamente.');
+        })
+        .catch((error) => {
+          console.error('Error al guardar los datos del usuario:', error);
+        });
+        localStorage.setItem('username', username);
+        console.log("username: " + username);
+        window.location.href = '/signup/enfermera';
+      
+    }
+    else
+    {
+      alert('El username debe ser de mas de 4 caracteres sin contar espacios');
+      return false;
+    }
   };
 
   return (
-    <Container component="main" maxWidth="xs">
+    <Container component="main" maxWidth="xs" sx={{ backgroundColor: 'white' }}>
       <CssBaseline />
       <Box
         sx={{
