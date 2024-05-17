@@ -11,33 +11,13 @@ import SendIcon from '@mui/icons-material/Send';
 // limpiarMovimiento();
 // limpiarSocio();
 
-const currencies = [
-  {
-    value: 'USD',
-    label: 'Ethereum Mainnet',
-    simbol: 'E',
-  },
-  {
-    value: 'EUR',
-    label: 'Arbitrum Sepolia',
-    simbol: 'A',
-  },
-  {
-    value: 'BTC',
-    label: 'Sepolia',
-    simbol: 'S',    
-  },
-  {
-    value: 'JPY',
-    label: 'Moonbase Alpha',
-    simbol: 'M',
-  },
-];
-
 const Page = () => {
   const [amount, setAmount] = useState(1); // Estado para almacenar el monto
   const [selectedCurrency, setSelectedCurrency] = useState('EUR');
   const [selectedMarker, setSelectedMarker] = useState<any | null>(null); // Cambiado a any
+  const [coords, setCoords] = useState<{ lat: number | null, lng: number | null }>({ lat: null, lng: null });
+  const [error, setError] = useState<string | null>(null);
+
   
   const handleSelectMarker = (marker: any) => {
     setSelectedMarker(marker);
@@ -45,14 +25,25 @@ const Page = () => {
     console.log("buyicons"+selectedMarker);
   };
 
-//    // Función para manejar el cambio en el monto
-//    const handleAmountChange = (event: { target: { value: Uint; }; }, montoMaximo: number) => {
-//     let newValue = parseInt(event.target.value, 10);
-//     if (newValue > montoMaximo) {
-//       newValue = montoMaximo;
-//     }
-//     setAmount(newValue);
-//   };
+
+  const handlegeo = () => {
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(
+            ({ coords: { latitude, longitude } }) => {
+                setCoords({ lat: latitude, lng: longitude });
+            },
+            () => {
+                setError("Tu navegador está bien, pero ocurrió un error.");
+            }
+        );
+    } else {
+        setError("Tu navegador no dispone de la geolocalización, actualízalo.");
+    }
+    <>
+    <p>Latitud: <span id="latitude">{coords.lat !== null ? coords.lat : '-'}</span></p>
+    <p>Longitud: <span id="longitude">{coords.lng !== null ? coords.lng : '-'}</span></p>
+    </>
+  }
 
   const handleSend = () => {
     const selectedStore = localStorage.getItem('selectedStore');
@@ -152,3 +143,11 @@ const Page = () => {
 }
 
 export default Page;
+function setError(arg0: string) {
+    throw new Error('Function not implemented.');
+}
+
+function setCoords(arg0: { lat: number; lng: number; }) {
+    throw new Error('Function not implemented.');
+}
+
