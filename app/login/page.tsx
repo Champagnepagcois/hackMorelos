@@ -13,16 +13,26 @@ import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
 import ThemeRegistry from '@/components/ThemeRegistry';
-// import UsuariosLayout from './layout';
+import { verificarDireccionBilletera } from '@/components/comprobarcuenta';
+import { useState } from 'react';
 
+export default function SignIn() {
+  const [correo, setCorreo] = useState('');
 
-// TODO remove, this demo shouldn't need to reset the theme.
+  const handleEmailChange = (event: { target: { value: React.SetStateAction<string>; }; }) => {
+    setCorreo(event.target.value); // Actualiza el estado con el valor del campo de correo electrónico
+  };
 
-// const defaultTheme = createTheme();
+  const handleSubmit = async (event: { preventDefault: () => void; }) => {
+    event.preventDefault(); // Evita que el formulario se envíe de forma predeterminada
 
-export default function SignIn(){
-
-
+    const value = await verificarDireccionBilletera(correo);
+    if (value) {
+      window.location.href = '/usuario'; // Redirige si la verificación es exitosa
+    } else {
+      alert('Correo inválido'); // Agrega un manejo adecuado para el caso en que la verificación falle
+    }
+  };
 
   return (
     <ThemeRegistry>
@@ -42,7 +52,7 @@ export default function SignIn(){
           <Typography component="h1" variant="h5">
             Sign in
           </Typography>
-          <Box component="form"  noValidate sx={{ mt: 1 }}>
+          <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
             <TextField
               margin="normal"
               required
@@ -52,6 +62,8 @@ export default function SignIn(){
               name="email"
               autoComplete="email"
               autoFocus
+              value={correo}
+              onChange={handleEmailChange} // Maneja el cambio en el campo de correo electrónico
             />
             <TextField
               margin="normal"
@@ -90,6 +102,6 @@ export default function SignIn(){
           </Box>
         </Box>
       </Container>
-      </ThemeRegistry>
+    </ThemeRegistry>
   );
 }

@@ -1,13 +1,13 @@
 "use client";
-import React, { useState } from "react";
 import { makeStyles } from "@mui/styles";
 import TextField from "@mui/material/TextField";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
-import { db } from '../firebase/firebase';
+import { db } from '../../firebase/firebase';
 import GPT from "../helpers/gpt/ApiGpt";
+import React, { useState, useEffect } from 'react';
 
 const useStyles = makeStyles((theme) => ({
   root: {
