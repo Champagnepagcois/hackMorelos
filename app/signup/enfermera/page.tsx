@@ -5,7 +5,7 @@ const Page: React.FC = () => {
   useEffect(() => {
     // Crear y añadir la etiqueta <link> para el CSS
     const link = document.createElement('link');
-    link.href = 'https://calendar.google.com/calendar/scheduling-button-script.css';
+    link.href = 'https://calendar.google.com/calendar/scheduling-button-script.css',
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
@@ -18,8 +18,8 @@ const Page: React.FC = () => {
       if (window.calendar && window.calendar.schedulingButton) {
         const buttonElement = document.getElementById('calendar-scheduling-button');
         window.calendar.schedulingButton.load({
-          url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Fg7KaJnvI3BOD4AplFjr7VI4wyHsrFcg6gmNuHF-aOmkZeLzW2xD2Bh3pEe0wE_FaXsW0Sr2H?gv=true%027';
-           color: '#039BE5',
+          url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Fg7KaJnvI3BOD4AplFjr7VI4wyHsrFcg6gmNuHF-aOmkZeLzW2xD2Bh3pEe0wE_FaXsW0Sr2H?gv=true%027',
+          color: '#039BE5',
           label: 'Programar una cita',
           target: buttonElement || undefined,  // Asegura que target no sea null
         });
