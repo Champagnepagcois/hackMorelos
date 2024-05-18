@@ -1,7 +1,8 @@
 // api/chatApi.js
 import OpenAI from "openai";
 import Prompt from "../gpt/promps";
-const openai = new OpenAI({apiKey:'sk-proj-UvTFwOq5hJzRHtm0WFrJT3BlbkFJ87Q3YFh9DmtbLvICisZE',dangerouslyAllowBrowser:true});
+const key = 'sk-proj-UvTFwOq5hJzRHtm0WFrJT3BlbkFJ87Q3YFh9DmtbLvICisZE';
+const openai = new OpenAI({apiKey:key,dangerouslyAllowBrowser:true});
 
 const GPT = {};
 
