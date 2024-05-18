@@ -2,14 +2,27 @@
 import React, { useEffect, useState } from 'react';
 import UsuariosLayout from '../../user_layout';
 import GoogleMapComponent from '../../../../components/mapa';
-import { Avatar, Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, TextField } from '@mui/material';
+import { Avatar, Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Slider, TextField } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-// import { Uint } from 'web3';
-// import {limpiarSocio} from '../../../component/limpiarSocio'
+import AlignItemsList from '../../../../components/lista'
+import styled from '@emotion/styled';
 
 
-// limpiarMovimiento();
-// limpiarSocio();
+const StyledSliderContainer = styled.div`
+  width: 100%; /* Ancho predeterminado */
+
+  @media (max-width: 768px) {
+    width: 500px; /* Ancho para pantallas pequeñas */
+  }
+
+  @media (min-width: 769px) and (max-width: 1200px) {
+    width: 850px; /* Ancho para pantallas medianas */
+  }
+
+  @media (min-width: 1201px) {
+    width: 1000px; /* Ancho para pantallas grandes */
+  }
+`;
 
 const Page = () => {
   const [amount, setAmount] = useState(1); // Estado para almacenar el monto
@@ -17,30 +30,56 @@ const Page = () => {
   const [selectedMarker, setSelectedMarker] = useState<any | null>(null); // Cambiado a any
   const [coords, setCoords] = useState<{ lat: number | null, lng: number | null }>({ lat: null, lng: null });
   const [error, setError] = useState<string | null>(null);
+  const [distanceSliderValue, setDistanceSliderValue] = useState(30);
+  const [moneySliderValue, setMoneySliderValue] = useState(2000);
 
-  
   const handleSelectMarker = (marker: any) => {
     setSelectedMarker(marker);
     localStorage.setItem('selectedStore', JSON.stringify(marker));
-    console.log("buyicons"+selectedMarker);
+    console.log("buyicons" + selectedMarker);
   };
-
 
   const handlegeo = () => {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(
-            ({ coords: { latitude, longitude } }) => {
-                setCoords({ lat: latitude, lng: longitude });
-                console.log("Latitud:", latitude);
-                console.log("Longitud:", longitude);
-            },
-            () => {
-                setError("Tu navegador está bien, pero ocurrió un error.");
-            }
-        );
+      navigator.geolocation.getCurrentPosition(
+        ({ coords: { latitude, longitude } }) => {
+          setCoords({ lat: latitude, lng: longitude });
+          console.log("Latitud:", latitude);
+          console.log("Longitud:", longitude);
+        },
+        () => {
+          setError("Tu navegador está bien, pero ocurrió un error.");
+        }
+      );
     } else {
-        setError("Tu navegador no dispone de la geolocalización, actualízalo.");
+      setError("Tu navegador no dispone de la geolocalización, actualízalo.");
     }
+  }
+
+  const handleslide = (newValue: number | number[]) => {
+    if (typeof newValue === 'number') {
+      setDistanceSliderValue(newValue);
+      localStorage.setItem('consultorio', String(newValue));
+    } else {
+      const firstValue = newValue[0];
+      setDistanceSliderValue(firstValue);
+      localStorage.setItem('consultorio', String(firstValue));
+    }
+    const consultorioValue = localStorage.getItem('consultorio');
+    console.log('Valor del consultorio:', consultorioValue);
+  }
+
+  const handlemoney = (newValue: number | number[]) => {
+    if (typeof newValue === 'number') {
+      setMoneySliderValue(newValue);
+      localStorage.setItem('dinero', String(newValue));
+    } else {
+      const firstValue = newValue[0];
+      setMoneySliderValue(firstValue);
+      localStorage.setItem('dinero', String(firstValue));
+    }
+    const dineroValue = localStorage.getItem('dinero');
+    console.log('Valor del dinero:', dineroValue);
   }
 
   const handleSend = () => {
@@ -48,20 +87,16 @@ const Page = () => {
     const movimientoData = {
       movimiento: 'Buy Coins',
       monto: amount,
-
       // Otros datos que quieras guardar
     };
     localStorage.setItem('movimiento', JSON.stringify(movimientoData));
-  
-    // Imprimir los datos guardados en la consola
+
     console.log('Datos guardados en localStorage:', movimientoData);
     console.log('Datos guardados en localStorage:', selectedStore);
-  
-    // Redirigir a la página de confirmación
+
     if (selectedStore && movimientoData) {
-      // Si están llenos, redirigir a la página de confirmación
       window.location.href = '/Confirmation';
-    } 
+    }
   };
 
   useEffect(() => {
@@ -70,83 +105,68 @@ const Page = () => {
     if (storedMarker) {
       setSelectedMarker(JSON.parse(storedMarker));
     }
+    const storedConsultorio = localStorage.getItem('consultorio');
+    if (storedConsultorio) {
+      setDistanceSliderValue(parseFloat(storedConsultorio));
+    }
+    const storedDinero = localStorage.getItem('dinero');
+    if (storedDinero) {
+      setMoneySliderValue(parseFloat(storedDinero));
+    }
   }, []);
 
-
-
-  return (
-
-    <UsuariosLayout>
-    <Grid container spacing={1}>
-      <Grid item xs={9} sm={7}>
-        <div>
-          {/* <h2>Buy Coins</h2>
-          <div>
-            <p>Affiliate partner: {selectedMarker && selectedMarker.nombre}</p>
-            <p>Partner descriptions: {selectedMarker && selectedMarker.descripcion}</p>
-            <p>Partner location: {selectedMarker && selectedMarker.direccion}</p>
-            <p>Maximum allowable amount: {selectedMarker && selectedMarker.monto}</p>
-          </div> */}
-          <GoogleMapComponent onSelectMarker={handleSelectMarker} coords={coords} />
-        </div>
-      </Grid>
-      <Grid item xs={3} sm={5}>
-        <div>
-          <h3>Purchase Data</h3>
-          {/* <FormControl fullWidth sx={{ m: 1 }}>
-            <InputLabel htmlFor="outlined-adornment-amount">Amount</InputLabel>
-            <OutlinedInput
-              id="outlined-adornment-amount"
-              startAdornment={<InputAdornment position="start">$</InputAdornment>}
-              label="Amount"
-              type="number"
-              value={amount}
-            //   onChange={(event) => handleAmountChange(event, selectedMarker && selectedMarker.monto)}
-              inputProps={{
-                min: 1, // Cambia 1 al valor mínimo deseado
-                max: 100, // Cambia 100 al valor máximo deseado
-              }}
-            />
-          </FormControl> */}
-          {/* <div>
-          <TextField
-              sx={{ m: 1 }}
-              id="outlined-select-currency-native"
-              select
-              label="Coin"
-              value={selectedCurrency}
-              onChange={(event) => setSelectedCurrency(event.target.value)}
-              SelectProps={{
-                native: true,
-              }}
-              helperText="Please select your currency"
-            >
-              {currencies.map((option) => (
-                <>
-                <option key={option.value} value={option.value}>
-                  {option.label}
-                </option>
-                </>
-              ))}
-            </TextField>
-            </div> */}
-          <Button variant="contained" endIcon={<SendIcon />} sx={{ ml: 4 }} onClick={handleSend}>
-            Send
-          </Button>
-        </div>
-      </Grid>
-    </Grid>
-  </UsuariosLayout>
-
-  );
-}
+    return (
+      <UsuariosLayout>
+        <Grid container spacing={3}>
+          {/* Primer elemento: AlignItemsList */}
+          <Grid item xs={12} sm={4}>
+            <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100vh - 64px)' }}>
+              <AlignItemsList />
+            </Box>
+          </Grid>
+          {/* Segundo elemento: GoogleMapComponent */}
+          <Grid item xs={12} sm={8}>
+            <div>
+              <GoogleMapComponent onSelectMarker={handleSelectMarker} coords={coords} />
+            </div>
+          </Grid>
+          {/* Tercer elemento: Sliders y botón */}
+          <Grid item xs={12} sm={12}>
+            <Box sx={{ ml: 2, mt: 2 }}>
+              <h3>Distancia (KM)</h3>
+              <StyledSliderContainer>
+              <Slider
+                aria-label="Distance"
+                value={distanceSliderValue}
+                onChange={(event, newValue) => handleslide(newValue)}
+                valueLabelDisplay="auto"
+                step={10}
+                marks
+                min={10}
+                max={110}
+              />
+              </StyledSliderContainer>
+              <h3>Precio (MXN)</h3>
+              <StyledSliderContainer>
+              <Slider
+                aria-label="Money"
+                value={moneySliderValue}
+                onChange={(event, newValue) => handlemoney(newValue)}
+                valueLabelDisplay="auto"
+                step={1000}
+                marks
+                min={1000}
+                max={4000}
+              />
+              </StyledSliderContainer>
+              <Button variant="contained" endIcon={<SendIcon />} sx={{ ml: 4 }} onClick={handleSend}>
+                Send
+              </Button>
+            </Box>
+          </Grid>
+        </Grid>
+      </UsuariosLayout>
+    );
+  };
 
 export default Page;
-function setError(arg0: string) {
-    throw new Error('Function not implemented.');
-}
-
-function setCoords(arg0: { lat: number; lng: number; }) {
-    throw new Error('Function not implemented.');
-}
-
