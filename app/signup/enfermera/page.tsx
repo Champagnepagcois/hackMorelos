@@ -1,11 +1,18 @@
-"use client"
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Esto centra verticalmente el contenido */
+`;
 
 const Page: React.FC = () => {
   useEffect(() => {
     // Crear y añadir la etiqueta <link> para el CSS
     const link = document.createElement('link');
-    link.href = 'https://calendar.google.com/calendar/scheduling-button-script.css',
+    link.href = 'https://calendar.google.com/calendar/scheduling-button-script.css';
     link.rel = 'stylesheet';
     document.head.appendChild(link);
 
@@ -36,10 +43,11 @@ const Page: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <ButtonContainer>
       <button id="calendar-scheduling-button">Programar una cita</button>
-    </div>
+    </ButtonContainer>
   );
 };
 
 export default Page;
+
