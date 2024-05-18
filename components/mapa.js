@@ -24,7 +24,7 @@ function deg2rad(deg) {
   return deg * (Math.PI / 180);
 }
 
-function MyComponent({ onSelectMarker, coords }) {
+function MyComponent({ onSelectMarker, coords , setFilteredMarkers}) {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
@@ -34,6 +34,7 @@ function MyComponent({ onSelectMarker, coords }) {
   const [map, setMap] = useState(null);
   const [selectedMarker, setSelectedMarker] = useState(null);
   const [markers, setMarkers] = useState([]);
+  
 
   useEffect(() => {
     // Obtener datos de Firestore
@@ -44,9 +45,9 @@ function MyComponent({ onSelectMarker, coords }) {
           id: doc.id,
           ...doc.data()
         }));
-        console.log('Datos recuperados de Firestore:', markersArray);
+        // console.log('Datos recuperados de Firestore:', markersArray);
         setMarkers(markersArray);
-        console.log("fetchData", markersArray);
+        // console.log("fetchData", markersArray);
       } catch (error) {
         console.error('Error fetching markers from Firestore:', error);
       }
@@ -81,11 +82,17 @@ function MyComponent({ onSelectMarker, coords }) {
   console.log('Coords:', coords);
 
   // Filtrar las marcas basadas en la distancia y el dinero
-  const filteredMarkers = markers.filter(marker => {
+  const filteredMarkers = markers.map(marker => {
     const distance = getDistanceFromLatLonInKm(coords.lat, coords.lng, marker.lat, marker.lng);
-    console.log(`Marker: ${marker.id}, Distance: ${distance}, Monto: ${marker.precio}`);
-    return distance <= distanceLimit && marker.precio <= moneyLimit;
-  });
+    // console.log(`Marker: ${marker.id}, Distance: ${distance}, Monto: ${marker.precio}`);
+    return {
+    ...marker,
+    distance: distance
+  };
+}).filter(marker => {
+  // Filtrar los marcadores por distancia y dinero
+  return marker.distance <= distanceLimit && marker.precio <= moneyLimit;
+});
 
   // Verificar los marcadores filtrados
   console.log('Filtered Markers:', filteredMarkers);
@@ -93,6 +100,11 @@ function MyComponent({ onSelectMarker, coords }) {
 
   // Almacenar los marcadores filtrados en el localStorage
   localStorage.setItem('filteredMarkers', filteredMarkersJSON);
+  // console.log("segundapruba: " + filteredMarkersJSON);
+
+// Establecer los marcadores filtrados en el estado del componente padre
+
+
   return isLoaded ? (
     <GoogleMap
       mapContainerStyle={{

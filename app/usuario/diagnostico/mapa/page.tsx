@@ -2,42 +2,36 @@
 import React, { useEffect, useState } from 'react';
 import UsuariosLayout from '../../user_layout';
 import GoogleMapComponent from '../../../../components/mapa';
-import { Avatar, Box, Button, FormControl, Grid, InputAdornment, InputLabel, OutlinedInput, Slider, TextField } from '@mui/material';
+import { Box, Button, Grid, Slider } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import AlignItemsList from '../../../../components/lista'
+import {DataTable} from '../../../../components/lista'
 import styled from '@emotion/styled';
 
-
 const StyledSliderContainer = styled.div`
-  width: 100%; /* Ancho predeterminado */
+  width: 100%;
 
   @media (max-width: 768px) {
-    width: 500px; /* Ancho para pantallas pequeñas */
+    width: 500px;
   }
 
   @media (min-width: 769px) and (max-width: 1200px) {
-    width: 850px; /* Ancho para pantallas medianas */
+    width: 850px;
   }
 
   @media (min-width: 1201px) {
-    width: 1000px; /* Ancho para pantallas grandes */
+    width: 1000px;
   }
 `;
 
 const Page = () => {
-  const [amount, setAmount] = useState(1); // Estado para almacenar el monto
-  const [selectedCurrency, setSelectedCurrency] = useState('EUR');
-  const [selectedMarker, setSelectedMarker] = useState<any | null>(null); // Cambiado a any
+  const [filteredMarkers, setFilteredMarkers] = useState([]);
+  const [selectedMarker, setSelectedMarker] = useState<any | null>(null);
   const [coords, setCoords] = useState<{ lat: number | null, lng: number | null }>({ lat: null, lng: null });
   const [error, setError] = useState<string | null>(null);
-  const [distanceSliderValue, setDistanceSliderValue] = useState(30);
-  const [moneySliderValue, setMoneySliderValue] = useState(2000);
-
-  const handleSelectMarker = (marker: any) => {
-    setSelectedMarker(marker);
-    localStorage.setItem('selectedStore', JSON.stringify(marker));
-    console.log("buyicons" + selectedMarker);
-  };
+  const [distanceSliderValue, setDistanceSliderValue] = useState(0);
+  const [moneySliderValue, setMoneySliderValue] = useState(0);
+  const distanceLimit = 0;
+  const moneyLimit = 4000;
 
   const handlegeo = () => {
     if (navigator.geolocation) {
@@ -54,7 +48,7 @@ const Page = () => {
     } else {
       setError("Tu navegador no dispone de la geolocalización, actualízalo.");
     }
-  }
+  };
 
   const handleslide = (newValue: number | number[]) => {
     if (typeof newValue === 'number') {
@@ -67,7 +61,7 @@ const Page = () => {
     }
     const consultorioValue = localStorage.getItem('consultorio');
     console.log('Valor del consultorio:', consultorioValue);
-  }
+  };
 
   const handlemoney = (newValue: number | number[]) => {
     if (typeof newValue === 'number') {
@@ -80,13 +74,11 @@ const Page = () => {
     }
     const dineroValue = localStorage.getItem('dinero');
     console.log('Valor del dinero:', dineroValue);
-  }
+  };
 
   const handleSend = () => {
     const selectedStore = localStorage.getItem('selectedStore');
     const movimientoData = {
-      movimiento: 'Buy Coins',
-      monto: amount,
       // Otros datos que quieras guardar
     };
     localStorage.setItem('movimiento', JSON.stringify(movimientoData));
@@ -101,40 +93,50 @@ const Page = () => {
 
   useEffect(() => {
     handlegeo();
+
     const storedMarker = localStorage.getItem('selectedStore');
     if (storedMarker) {
       setSelectedMarker(JSON.parse(storedMarker));
     }
+
     const storedConsultorio = localStorage.getItem('consultorio');
     if (storedConsultorio) {
       setDistanceSliderValue(parseFloat(storedConsultorio));
     }
+
     const storedDinero = localStorage.getItem('dinero');
     if (storedDinero) {
       setMoneySliderValue(parseFloat(storedDinero));
     }
+
+    console.log("filteredMarkers después de useEffect:", filteredMarkers);
   }, []);
 
-    return (
-      <UsuariosLayout>
-        <Grid container spacing={3}>
-          {/* Primer elemento: AlignItemsList */}
-          <Grid item xs={12} sm={4}>
-            <Box sx={{ overflowY: 'auto', maxHeight: 'calc(100vh - 64px)' }}>
-              <AlignItemsList />
-            </Box>
-          </Grid>
-          {/* Segundo elemento: GoogleMapComponent */}
-          <Grid item xs={12} sm={8}>
-            <div>
-              <GoogleMapComponent onSelectMarker={handleSelectMarker} coords={coords} />
-            </div>
-          </Grid>
-          {/* Tercer elemento: Sliders y botón */}
-          <Grid item xs={12} sm={12}>
-            <Box sx={{ ml: 2, mt: 2 }}>
-              <h3>Distancia (KM)</h3>
-              <StyledSliderContainer>
+  const handleSelectMarker = (marker: any) => {
+    console.log('Selected Marker:', marker);
+  };
+
+  return (
+    <UsuariosLayout>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={8}>
+          <div>
+            <DataTable/>
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={8}>
+          <div>
+            {coords.lat !== null && coords.lng !== null ? (
+              <GoogleMapComponent onSelectMarker={handleSelectMarker} coords={coords} setFilteredMarkers={undefined}  />
+            ) : (
+              <p>Cargando mapa...</p>
+            )}
+          </div>
+        </Grid>
+        <Grid item xs={12} sm={12}>
+          <Box sx={{ ml: 2, mt: 2 }}>
+            <h3>Distancia (KM)</h3>
+            <StyledSliderContainer>
               <Slider
                 aria-label="Distance"
                 value={distanceSliderValue}
@@ -145,9 +147,9 @@ const Page = () => {
                 min={10}
                 max={110}
               />
-              </StyledSliderContainer>
-              <h3>Precio (MXN)</h3>
-              <StyledSliderContainer>
+            </StyledSliderContainer>
+            <h3>Precio (MXN)</h3>
+            <StyledSliderContainer>
               <Slider
                 aria-label="Money"
                 value={moneySliderValue}
@@ -158,15 +160,15 @@ const Page = () => {
                 min={1000}
                 max={4000}
               />
-              </StyledSliderContainer>
-              <Button variant="contained" endIcon={<SendIcon />} sx={{ ml: 4 }} onClick={handleSend}>
-                Send
-              </Button>
-            </Box>
-          </Grid>
+            </StyledSliderContainer>
+            <Button variant="contained" endIcon={<SendIcon />} sx={{ ml: 4 }} onClick={handleSend}>
+              Send
+            </Button>
+          </Box>
         </Grid>
-      </UsuariosLayout>
-    );
-  };
+      </Grid>
+    </UsuariosLayout>
+  );
+};
 
 export default Page;
