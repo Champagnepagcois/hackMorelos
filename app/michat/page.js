@@ -7,8 +7,7 @@ import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { db } from '../firebase/firebase';
-
-
+import GPT from "../helpers/gpt/ApiGpt";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -48,8 +47,7 @@ const useStyles = makeStyles((theme) => ({
 const ChatInterface = () => {
   const classes = useStyles();
   const [prompt, setPrompt] = useState("");
-  const [messages, setMessages] = useState([{message:"hola, me podrias ayudar a encontrar un médico?", user:1}]);
-  const [username, setUsername] = useState('');
+  const [user, setUsername] = useState("");
 
   useEffect(() => {
     // Recolectar el valor del localStorage cuando el componente se monte
@@ -78,16 +76,65 @@ const ChatInterface = () => {
     }
   }
   
+  const [messages, setMessages] = useState([
+    {
+      message: "Hola, dime que sintomas tienes 👨‍⚕️",
+      user: 'bot',
+    },
+  ]);
 
   const handleMessageChange = (event) => {
     setPrompt(event.target.value);
   };
+  const handleKeyPress = (event) => {
+    if (event.key === 'Enter') {
+      handleMessageSend();
+    }
+  };
 
-  const handleMessageSend = () => {
-    if (prompt.trim() !== "") { // Cambio aquí, usando message en lugar de prompt
-      const newMessage = { user: 1, message: prompt }; // Crear un nuevo mensaje con el texto
-      setMessages([...messages, newMessage]); // Agregar el nuevo mensaje al array de mensajes
-      setPrompt(""); 
+  const handleMessageSend = async () => {
+    console.log(messages);
+    if (prompt.trim() !== "") {
+      // Crear un nuevo mensaje con el texto del prompt
+      const newMessage = { user: 'cliente', message: prompt };
+      // Agregar el nuevo mensaje al array de mensajes
+      setMessages((prevMessages) => [...prevMessages, newMessage]);
+      // Limpiar el campo de entrada después de enviar el mensaje
+      setPrompt("");
+
+      // Verificar si es el primer mensaje
+      if (messages.length === 0 || messages.length<1) {
+        try {
+          // Lanzar prompt de inicio de dignotico
+          const resa = await GPT.PrimerMensaje(messages);
+          let res = JSON.stringify(resa);
+          console.log(messages);
+          // Crear un nuevo mensaje con la respuesta
+          const newMessage2 = { user: 'bot', message: res.preguntaAlCliente };
+          // Agregar el nuevo mensaje al array de mensajes
+          setMessages((prevMessages) => [...prevMessages, newMessage2]);
+        } catch (error) {
+          console.error("Error al obtener el primer mensaje:", error);
+        }
+      } else {
+        try {
+          // Lanzar prompt de inicio de dignotico
+          const resa = await GPT.intermedio(messages);
+          //let res = JSON.stringify(resa);
+          let res = JSON.parse(resa);
+          if (res.DiagnosticoCompleto) {
+            console.log(res);
+            actualizarConsulta();           
+          }
+          console.log(res);
+          // Crear un nuevo mensaje con la respuesta
+          const newMessage2 = { user: 'bot', message: res.preguntaAlCliente };
+          // Agregar el nuevo mensaje al array de mensajes
+          setMessages((prevMessages) => [...prevMessages, newMessage2]);
+        } catch (error) {
+          console.error("Error al obtener el primer mensajeSS:", error);
+        }
+      }
     }
   };
 
@@ -96,7 +143,12 @@ const ChatInterface = () => {
       <Paper className={classes.root}>
         <div className={classes.messagesContainer}>
           {messages.map((msg, index) => (
-            <Paper key={index} className={msg.user%2==0?classes.messageBot:classes.message}>
+            <Paper
+              key={index}
+              className={
+                msg.user === 'bot' ? classes.messageBot : classes.message
+              }
+            >
               <Typography variant="body1">{msg.message}</Typography>
             </Paper>
           ))}
@@ -104,17 +156,20 @@ const ChatInterface = () => {
         <div className={classes.inputContainer}>
           <TextField
             className={classes.textField}
-            label="Type your message"
+            label="Escribe tus sintomas"
             variant="outlined"
             value={prompt}
             onChange={handleMessageChange}
+            onEnterPress={handleMessageSend}
+            onKeyPress={handleKeyPress}
           />
           <Button
             variant="contained"
             color="primary"
             onClick={handleMessageSend}
+            onEnterPress={handleMessageSend}
           >
-            Send
+            enviar
           </Button>
         </div>
       </Paper>
