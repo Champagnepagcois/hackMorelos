@@ -4,6 +4,7 @@ import { db } from '../firebase/firebase';
 
 // Función para verificar si la dirección de la billetera está registrada
 export async function verificarDireccionBilletera(email) {
+    
     try {
 
         // Consultar Firestore para ver si la dirección de la billetera existe

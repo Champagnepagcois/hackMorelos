@@ -28,7 +28,7 @@ export default function SignIn() {
 
     const value = await verificarDireccionBilletera(correo);
     if (value) {
-      window.location.href = '/usuario'; // Redirige si la verificación es exitosa
+      window.location.href = '/usuario/diagnostico'; // Redirige si la verificación es exitosa
     } else {
       alert('Correo inválido'); // Agrega un manejo adecuado para el caso en que la verificación falle
     }

@@ -34,12 +34,13 @@ import AddCardIcon from '@mui/icons-material/AddCard';
 // import disconnectWallet from './disconect';
 
 const rutas = [{nombre:'Diagnostico',icon: <MonitorHeartIcon/>, link:'./usuario/diagnostico'},
-              {nombre:'Historial',icon: <LibraryBooksIcon/>, link:'./usuario/historial'},
-              {nombre:'Recomendaciones',icon: <AnnouncementIcon/>, link:'./usuario/recomendaciones'},
-              {nombre:'Citas',icon: <DateRangeIcon/>, link:'./usuario/citas'},
+                {nombre:'Mapa',icon: <LibraryBooksIcon/>, link:'./usuario/diagnostico/mapa'},
+              // {nombre:'Historial',icon: <LibraryBooksIcon/>, link:'./usuario/historial'},
+              // {nombre:'Recomendaciones',icon: <AnnouncementIcon/>, link:'./usuario/recomendaciones'},
+              // {nombre:'Citas',icon: <DateRangeIcon/>, link:'./usuario/citas'},
               ];
 const rutas2 = [
-              {nombre:'Contact Us',icon: <AddCardIcon/>, link:'5'},
+              // {nombre:'Contact Us',icon: <AddCardIcon/>, link:'5'},
               {nombre:'Sign out',icon: <LoginIcon/>, link:'4'},
               ];
 const drawerWidth = 240;
