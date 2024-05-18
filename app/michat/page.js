@@ -6,6 +6,9 @@ import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
+import { db } from '../firebase/firebase';
+
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -46,6 +49,35 @@ const ChatInterface = () => {
   const classes = useStyles();
   const [prompt, setPrompt] = useState("");
   const [messages, setMessages] = useState([{message:"hola, me podrias ayudar a encontrar un médico?", user:1}]);
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    // Recolectar el valor del localStorage cuando el componente se monte
+    if (typeof window !== 'undefined') {
+      const storedUsername = localStorage.getItem('username');
+      if (storedUsername) {
+        setUsername(storedUsername);
+      }
+    }
+  }, []);
+
+  async function actualizarConsulta(userId, variable1, variable2) {
+    try {
+      // Referencia al documento del usuario
+      const userRef = doc(db, 'usuarios', userId);
+  
+      // Actualiza el campo 'consulta' del documento
+      await updateDoc(userRef, {
+        consulta: [variable1, variable2] // Puedes usar arrayUnion si quieres agregar elementos sin sobrescribir
+      });
+  
+      console.log('Consulta actualizada exitosamente');
+      alert("Gracias por tus respuestas puedes continuar:")
+    } catch (error) {
+      console.error('Error actualizando consulta: ', error);
+    }
+  }
+  
 
   const handleMessageChange = (event) => {
     setPrompt(event.target.value);
@@ -55,7 +87,7 @@ const ChatInterface = () => {
     if (prompt.trim() !== "") { // Cambio aquí, usando message en lugar de prompt
       const newMessage = { user: 1, message: prompt }; // Crear un nuevo mensaje con el texto
       setMessages([...messages, newMessage]); // Agregar el nuevo mensaje al array de mensajes
-      setPrompt(""); // Limpiar el campo de entrada después de enviar el mensaje
+      setPrompt(""); 
     }
   };
 

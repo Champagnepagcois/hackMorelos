@@ -17,6 +17,7 @@ import ListItem from '@mui/material/ListItem';
 import ListItemButton from '@mui/material/ListItemButton';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import {limpiarMovimiento} from '../components/limpiarUsuario'
 
 // mis iconos
 import SupportAgentIcon from '@mui/icons-material/SupportAgent'; //ayuda
@@ -115,6 +116,7 @@ const Drawer = styled(MuiDrawer, { shouldForwardProp: (prop) => prop !== 'open' 
 const handleSignOut = async () => {
   // await disconnectWallet(); // Desconectar la billetera
   localStorage.removeItem('user');
+  limpiarMovimiento();
   window.location.href = '/'; // Redirigir al inicio
 };
 
