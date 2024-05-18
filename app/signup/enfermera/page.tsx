@@ -1,5 +1,12 @@
-"use client"
 import React, { useEffect } from 'react';
+import styled from 'styled-components';
+
+const ButtonContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh; /* Esto centra verticalmente el contenido */
+`;
 
 const Page: React.FC = () => {
   useEffect(() => {
@@ -18,7 +25,7 @@ const Page: React.FC = () => {
       if (window.calendar && window.calendar.schedulingButton) {
         const buttonElement = document.getElementById('calendar-scheduling-button');
         window.calendar.schedulingButton.load({
-          url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ03khJ3boyt3x1D97ZfdcuTydY16yvi2_NU_c6-o40ofVJvHRoghCqR2MIdSOslzHXJzsGfFGUA?gv=true',
+          url: 'https://calendar.google.com/calendar/appointments/schedules/AcZssZ0Fg7KaJnvI3BOD4AplFjr7VI4wyHsrFcg6gmNuHF-aOmkZeLzW2xD2Bh3pEe0wE_FaXsW0Sr2H?gv=true%027',
           color: '#039BE5',
           label: 'Programar una cita',
           target: buttonElement || undefined,  // Asegura que target no sea null
@@ -36,10 +43,11 @@ const Page: React.FC = () => {
   }, []);
 
   return (
-    <div>
+    <ButtonContainer>
       <button id="calendar-scheduling-button">Programar una cita</button>
-    </div>
+    </ButtonContainer>
   );
 };
 
 export default Page;
+
