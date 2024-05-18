@@ -28,7 +28,7 @@ function MyComponent({ onSelectMarker, coords , setFilteredMarkers}) {
 
   const { isLoaded } = useJsApiLoader({
     id: 'google-map-script',
-    googleMapsApiKey: "AIzaSyBoZG9YZPAuaQnRYfUMjYXR8-NmMlO-pZA"
+    googleMapsApiKey: "" //AIzaSyBoZG9YZPAuaQnRYfUMjYXR8-NmMlO-pZA
   });
 
   const [map, setMap] = useState(null);
