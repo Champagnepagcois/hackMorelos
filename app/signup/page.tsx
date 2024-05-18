@@ -33,7 +33,7 @@ export default function SignUp() {
   };
 
   const guardarDatosUsuario = (username: string, email: string, password: string) => {
-    if (!username && contarCaracteresSinEspacios(username)>3 && !email && !password) {
+    if (username && contarCaracteresSinEspacios(username)>3 && email && password) {
       // Referencia a la colección "usuarios" y el documento con el ID del nombre de usuario
       const usuarioRef = db.collection('usuarios').doc(username);
 
@@ -56,7 +56,7 @@ export default function SignUp() {
     }
     else
     {
-      alert('El username debe ser de mas de 4 caracteres sin contar espacios');
+      alert('Rellene todos los campos co su formato solicitado, correo para Email y el username debe ser mayor a 3 caracteres y unico en el sistema');
       return false;
     }
   };
@@ -98,6 +98,7 @@ export default function SignUp() {
                 label="Email Address"
                 name="email"
                 autoComplete="email"
+                
               />
             </Grid>
             <Grid item xs={12}>
@@ -111,12 +112,12 @@ export default function SignUp() {
                 autoComplete="new-password"
               />
             </Grid>
-            <Grid item xs={12}>
+            {/* <Grid item xs={12}>
               <FormControlLabel
                 control={<Checkbox value="allowExtraEmails" color="primary" />}
                 label="I want to receive inspiration, marketing promotions and updates via email."
               />
-            </Grid>
+            </Grid> */}
           </Grid>
           <Button
             type="submit"
@@ -128,7 +129,7 @@ export default function SignUp() {
           </Button>
           <Grid container justifyContent="flex-end">
             <Grid item>
-              <Link href="#" variant="body2">
+              <Link href="/login" variant="body2">
                 Already have an account? Sign in
               </Link>
             </Grid>

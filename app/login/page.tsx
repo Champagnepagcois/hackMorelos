@@ -12,6 +12,7 @@ import Box from '@mui/material/Box';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import Typography from '@mui/material/Typography';
 import Container from '@mui/material/Container';
+import ThemeRegistry from '@/components/ThemeRegistry';
 // import UsuariosLayout from './layout';
 
 
@@ -24,6 +25,7 @@ export default function SignIn(){
 
 
   return (
+    <ThemeRegistry>
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -41,7 +43,7 @@ export default function SignIn(){
             Sign in
           </Typography>
           <Box component="form"  noValidate sx={{ mt: 1 }}>
-            {/* <TextField
+            <TextField
               margin="normal"
               required
               fullWidth
@@ -50,8 +52,8 @@ export default function SignIn(){
               name="email"
               autoComplete="email"
               autoFocus
-            /> */}
-            {/* <TextField
+            />
+            <TextField
               margin="normal"
               required
               fullWidth
@@ -60,52 +62,34 @@ export default function SignIn(){
               type="password"
               id="password"
               autoComplete="current-password"
-            /> */}
-            {/* <FormControlLabel
+            />
+            <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
               label="Remember me"
-            /> */}
-            {/* <Button
+            />
+            <Button
               type="submit"
               fullWidth
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
               Sign In
-            </Button> */}
-            <Button
-  type="button"
-  fullWidth
-  variant="contained"
-  sx={{
-    mt: 3,
-    mb: 2,
-    height: '60px', // Altura del botón
-    fontSize: '1.5rem', // Tamaño del texto del botón
-    borderRadius: '10px', // Borde redondeado
-    boxShadow: '0px 4px 6px rgba(0, 0, 0, 0.1)', // Sombra
-    '&:hover': {
-      backgroundColor: '#4caf50', // Color de fondo al pasar el mouse
-    },
-  }}
->
-  Wallet
-</Button>
-
+            </Button>
             <Grid container>
-              {/* <Grid item xs>
+              <Grid item xs>
                 <Link href="#" variant="body2">
                   Forgot password?
                 </Link>
-              </Grid> */}
-              {/* <Grid item>
-                <Link href="#" variant="body2">
+              </Grid>
+              <Grid item>
+                <Link href="/signup" variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
-              </Grid> */}
+              </Grid>
             </Grid>
           </Box>
         </Box>
       </Container>
+      </ThemeRegistry>
   );
 }
